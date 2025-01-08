@@ -180,7 +180,7 @@
             <div class="name">${name}</div>
             <div class="details">${interest}, ${country}</div>
             <div class="details">Net Worth: ${netWorth}</div>
-        `;
+            `;
 
             const object = new CSS3DObject(element);
             object.position.set(Math.random() * 400 - 200, Math.random() * 400 - 200, Math.random() * 400 -
@@ -212,6 +212,17 @@
         }
 
         animate();
+
+        // Function to handle window resizing
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Listen for window resize events
+        window.addEventListener('resize', onWindowResize);
+
     }).catch(error => {
         console.error('Error fetching sheet data:', error);
     });
@@ -256,9 +267,7 @@
         });
 
         animateTransition(objects, newPositions);
-
     }
-
 
     function arrangeSphere(objects) {
         const radius = 500;
@@ -298,8 +307,8 @@
 
 
     function arrangeGrid(objects) {
-        const rows = 5;
-        const cols = 4;
+        const rows = 4;
+        const cols = 5;
         const depth = 10; // Depth along the z-axis
         const spacing = 200;
 
