@@ -1,0 +1,55 @@
+services:
+  app:
+    image: jkaninda/nginx-php-fpm:8.2
+    container_name: app
+    restart: unless-stopped
+    user: www-data # Optional for production
+    volumes:
+      # Project root
+      - ./:/var/www/html
+    environment:
+      - name=GOOGLE_REDIRECT_URI
+      - value=https://periodic.nooraiman.cloud/auth/google/callback
+    ports:
+      - "8000:80"
+    networks:
+      - periodic
+    depends_on:
+      - db
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: laravel-app
+  #   container_name: laravel-app
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "8000:80"
+  #   networks:
+  #     - periodic
+  #   depends_on:
+  #     - db
+
+  db:
+    image: mysql:8.0-debian
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: periodic
+      MYSQL_ROOT_PASSWORD: periodic
+      MYSQL_USER: periodic
+      MYSQL_PASSWORD: periodic
+    ports:
+      - "3306"
+    volumes:
+      - periodic:/var/lib/mysql
+    networks:
+      - periodic
+
+networks:
+  periodic:
+
+volumes:
+  periodic:
